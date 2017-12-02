@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/jcrjaci/webpack-2.0-config/issues"
   },
-  "homepage": "https://github.com/jcrjaci/webpack-2.0-config#readme"
+  "homepage": "https://github.com/jcrjaci/webpack-2.0-config#readme",
+  "devDependencies": {
+    "webpack": "^3.9.1",
+    "webpack-dev-server": "^2.9.5"
+  }
 }
