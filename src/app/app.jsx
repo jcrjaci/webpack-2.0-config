@@ -1,11 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+
+import cat from "images/cat";
+import dog from "images/dog";
+import dogs from "images/dogs";
 
 const App = () => {
-    return (
-        <div>
-            <h1>Hello from your Component</h1>
-        </div>
-    );
-}
- 
+  return (
+    <div className="container">
+      <div className="image-wrapper">
+        <img src={cat} className="image-wrapper__image" alt="" />
+      </div>
+
+      <div className="image-wrapper">
+        <img src={dog} className="image-wrapper__image" alt="" />
+      </div>
+
+      <div className="image-wrapper">
+        <img src={dogs} className="image-wrapper__image" alt="" />
+      </div>
+    </div>
+  );
+};
+
 export default App;
