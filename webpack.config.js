@@ -3,6 +3,7 @@ const path = require("path");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
+const DashboardPlugin = require("webpack-dashboard/plugin");
 
 const config = {
   entry: "./src/index.js", // entry file
@@ -77,7 +78,8 @@ const config = {
     ] // end rules
   },
   plugins: [
-    new ExtractTextWebpackPlugin("styles.css") // call the ExtractTextWebpackPlugin constructor and name our css file
+    new ExtractTextWebpackPlugin("styles.css"), // call the ExtractTextWebpackPlugin constructor and name our css file
+    new DashboardPlugin()
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "./public"), // A directory or URL to serve HTML content from.
