@@ -3,23 +3,26 @@ const path = require("path");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-// const DashboardPlugin = require("webpack-dashboard/plugin");
-
-const VENDOR = [
-  'react',
-  'react-dom',
-];
+const VENDOR = ["react", "react-dom"];
+const PATH = {
+  public: path.resolve(__dirname, "./public"),
+  public_html: path.resolve(__dirname, "./public/index.html"),   
+  assets: {
+    images: path.resolve(__dirname, "src/assets/images")
+  },
+  exclude : /node_modules/
+};
 
 const config = {
   entry: {
     vendor: VENDOR,
-    app: "./src/index.js",
+    app: "./src/index.js"
   },
   output: {
-    path: path.resolve(__dirname, "./public"), // ouput path
-    filename: '[name].[hash].js',
+    path: PATH.public, // ouput path
+    filename: "[name].[hash].js"
   },
   resolve: {
     // These options change how modules are resolved
@@ -36,14 +39,14 @@ const config = {
     ], // Automatically resolve certain extensions
     alias: {
       // Create aliases
-      images: path.resolve(__dirname, "src/assets/images") // src/assets/images alias
+      images: PATH.assets.images
     }
   },
   module: {
     rules: [
       {
         test: /\.js$/, // files ending with .js
-        exclude: /node_modules/, // exclude the node_modules directory
+        exclude: PATH.exclude,
         loader: "babel-loader" // use this (babel-core) loader
       },
       {
@@ -59,7 +62,7 @@ const config = {
       {
         test: /\.jsx$/, // all files ending with .jsx
         loader: "babel-loader", // use the babel-loader for all .jsx files
-        exclude: /node_modules/ // exclude searching for files in the node_modules directory
+        exclude: PATH.exclude
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -85,30 +88,29 @@ const config = {
             }
           }
         ],
-        exclude: /node_modules/,
+        exclude: PATH.exclude,
         include: __dirname
       }
     ] // end rules
   },
   plugins: [
     new ExtractTextWebpackPlugin("styles.css"), // call the ExtractTextWebpackPlugin constructor and name our css file
-    // new DashboardPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       children: true,
       async: true,
       minChunks: 2
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "./public/index.html"),
+      template: PATH.public_html,
       hash: true,
-      chunks: ['vendor', 'app'],
-      chunksSortMode: 'manual',
-      filename: 'index.html',
-      inject: 'body'
-  }),
+      chunks: ["vendor", "app"],
+      chunksSortMode: "manual",
+      filename: "index.html",
+      inject: "body"
+    })
   ],
   devServer: {
-    contentBase: path.resolve(__dirname, "./public"), // A directory or URL to serve HTML content from.
+    contentBase: PATH.public, // A directory or URL to serve HTML content from.
     historyApiFallback: true, // fallback to /index.html for Single Page Applications.
     inline: true, // inline mode (set to false to disable including client scripts (like livereload)
     open: true // open default browser while launching
@@ -120,7 +122,7 @@ module.exports = config;
 
 if (process.env.NODE_ENV === "production") {
   module.exports.plugins.push(
-    new webpack.optimize.UglifyJsPlugin(), // call the uglify plugin
+    new webpack.optimize.UglifyJsPlugin(),
     new OptimizeCSSAssets()
   );
 }
