@@ -8,11 +8,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VENDOR = ["react", "react-dom"];
 const PATH = {
   public: path.resolve(__dirname, "./public"),
-  public_html: path.resolve(__dirname, "./public/index.html"),   
+  public_html: path.resolve(__dirname, "./public/index.html"),
   assets: {
     images: path.resolve(__dirname, "src/assets/images")
   },
-  exclude : /node_modules/
+  exclude: /node_modules/
 };
 
 const config = {
@@ -94,7 +94,7 @@ const config = {
     ] // end rules
   },
   plugins: [
-    new ExtractTextWebpackPlugin("styles.css"), // call the ExtractTextWebpackPlugin constructor and name our css file
+    new ExtractTextWebpackPlugin("[name].css"), // call the ExtractTextWebpackPlugin constructor and name our css file
     new webpack.optimize.CommonsChunkPlugin({
       children: true,
       async: true,
@@ -120,6 +120,7 @@ const config = {
 
 module.exports = config;
 
+// if production, then we need to add  the rest of plugins
 if (process.env.NODE_ENV === "production") {
   module.exports.plugins.push(
     new webpack.optimize.UglifyJsPlugin(),
