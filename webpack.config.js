@@ -3,6 +3,8 @@ const path = require("path");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 // const DashboardPlugin = require("webpack-dashboard/plugin");
 
 const VENDOR = [
@@ -95,9 +97,15 @@ const config = {
       children: true,
       async: true,
       minChunks: 2
-      // name: "vendor",
-      // chunks: ["vendor"]
-    })
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "./public/index.html"),
+      hash: true,
+      chunks: ['vendor', 'app'],
+      chunksSortMode: 'manual',
+      filename: 'index.html',
+      inject: 'body'
+  }),
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "./public"), // A directory or URL to serve HTML content from.
