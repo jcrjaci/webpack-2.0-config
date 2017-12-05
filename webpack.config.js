@@ -3,13 +3,21 @@ const path = require("path");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
-const DashboardPlugin = require("webpack-dashboard/plugin");
+// const DashboardPlugin = require("webpack-dashboard/plugin");
+
+const VENDOR = [
+  'react',
+  'react-dom',
+];
 
 const config = {
-  entry: "./src/index.js", // entry file
+  entry: {
+    vendor: VENDOR,
+    app: "./src/index.js",
+  },
   output: {
     path: path.resolve(__dirname, "./public"), // ouput path
-    filename: "output.js" // output filename
+    filename: '[name].[hash].js',
   },
   resolve: {
     // These options change how modules are resolved
@@ -38,10 +46,13 @@ const config = {
       },
       {
         test: /\.scss$/, // files ending with .scss
-        use: ['css-hot-loader'].concat(ExtractTextWebpackPlugin.extract({  // HMR for styles
-          fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader', 'postcss-loader'],
-        })),
+        use: ["css-hot-loader"].concat(
+          ExtractTextWebpackPlugin.extract({
+            // HMR for styles
+            fallback: "style-loader",
+            use: ["css-loader", "sass-loader", "postcss-loader"]
+          })
+        )
       },
       {
         test: /\.jsx$/, // all files ending with .jsx
@@ -79,7 +90,14 @@ const config = {
   },
   plugins: [
     new ExtractTextWebpackPlugin("styles.css"), // call the ExtractTextWebpackPlugin constructor and name our css file
-    new DashboardPlugin()
+    // new DashboardPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      children: true,
+      async: true,
+      minChunks: 2
+      // name: "vendor",
+      // chunks: ["vendor"]
+    })
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "./public"), // A directory or URL to serve HTML content from.
